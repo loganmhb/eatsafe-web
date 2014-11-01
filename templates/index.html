@@ -9,6 +9,7 @@
 <body>
   <div id="content"></div>
   <script type="text/jsx">
+
     var Restaurant = React.createClass({
       render: function() {
         return (
@@ -22,7 +23,6 @@
 
     var RestaurantList = React.createClass({
       render: function() {
-        console.log(this.props.restaurants.map);
         var restaurantNodes =
           this.props.restaurants.map(function(restaurant) {
             return (
@@ -66,14 +66,12 @@
 	};
       },
       makeAPIRequest: function(target, params) {
-        alert("Making api request.");
         var queryString = '?';
         for (var i in params) {
 	  queryString += i + '=' + params[i] + '&';
 	}
         queryString = queryString.slice(0, -1); // take off trailing '&'
         var queryUrl = 'api/' + target + queryString;
-        alert(queryUrl);
         $.ajax({
 	  url: queryUrl,
 	  datatype: 'json',
