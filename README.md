@@ -4,7 +4,8 @@ This is a frontend to access the Chicago health inspection data available
 through the [EatSafe API](https://github.com/samzhang111/EatSafe). It's mostly
 React on top of a tiny Flask app that passes AJAX requests on to the API.
 
-To use: 
+To use:
+
     git clone https://github.com/loganmhb/eatsafe-web
     cd eatsafe-web
     python eatsafe.py
