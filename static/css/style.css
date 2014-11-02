@@ -1,10 +1,14 @@
-html, body {
+html, body, #content, #eatSafe {
     height: 100%;
 }
 
 .yelpPic {
     float: left;
     margin-right: 10px;
+}
+
+#searchBar {
+    float: left;
 }
 
 .restaurantList {
