@@ -1,5 +1,12 @@
+/**
+  EatSafe Web -- Frontend access to the EatSafe API
+
+  Early days yet
+*/
+
 var Restaurant = React.createClass({
   render: function() {
+    // Get the picture from Yelp if available; otherwise use a placeholder.
     var picUrl = this.props.data.pic !== "" ?
       this.props.data.pic : "static/img/nopic.png";
     return (
@@ -14,6 +21,8 @@ var Restaurant = React.createClass({
 
 var RestaurantList = React.createClass({
   render: function() {
+    // Output a list of Restaurant componenents, passing each object
+    // to the corresponding restaurant as a prop.
     var restaurantNodes =
     this.props.restaurants.map(function(restaurant) {
       return (
@@ -22,15 +31,20 @@ var RestaurantList = React.createClass({
     });
     return (
       <div className="restaurantList">
-      {restaurantNodes}
+        {restaurantNodes}
       </div>
     );
   }
 });
 
+// SearchBox takes a callback from EatSafe in order to query the API
+// on form submit.
+
 var SearchBox = React.createClass({
   handleSubmit: function(e) {
+    // Don't post the form.
     e.preventDefault();
+    // Query the API through callback.
     this.props.onSubmit(
       'near',
       {lat: this.refs.lat.getDOMNode().value,
@@ -41,46 +55,46 @@ var SearchBox = React.createClass({
   render: function() {
     return (
       <form id="searchBox" onSubmit={this.handleSubmit}>
-      Lat: <input type="text" ref="lat" defaultValue="41.9" />
-      Long: <input type="text" ref="long" defaultValue="-87.6" />
-      <input type="submit" value="Search" />
+        Lat: <input type="text" ref="lat" defaultValue="41.9" />
+        Long: <input type="text" ref="long" defaultValue="-87.6" />
+        <input type="submit" value="Search" />
       </form>
     );
   }
 });
 
+// Parent component for the whole app
+
 var EatSafe = React.createClass({
   getInitialState: function() {
+    // Initial state is no restaurants
     return {
       data: []
     };
   },
   makeAPIRequest: function(target, params) {
-    var queryString = '?';
-    for (var i in params) {
-      queryString += i + '=' + params[i] + '&';
-    }
-    queryString = queryString.slice(0, -1); // take off trailing '&'
-    var queryUrl = 'api/' + target + queryString;
+    // Issues AJAX request to the Flask backend, which queries the
+    // EatSafe API (http://api.eatsafe.com/) and returns the result.
+    var queryUrl = 'api/' + target;
     $.ajax({
       url: queryUrl,
+      data: params,
       datatype: 'json',
       success: function(json) {
-	this.setState({
-	  data: JSON.parse(json)
-	});
+        this.setState({
+          data: JSON.parse(json)
+        });
       }.bind(this),
       error: function(xhr, status, err) {
-	console.error(this.props.url, status, err.toString());
+        console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
   },    
   render: function() {
-    console.log(this.state.data);
     return (
       <div id="eatSafe">
-      <SearchBox onSubmit={this.makeAPIRequest}/>
-      <RestaurantList restaurants={this.state.data}/>
+        <SearchBox onSubmit={this.makeAPIRequest}/>
+        <RestaurantList restaurants={this.state.data}/>
       </div>
     );
   }
