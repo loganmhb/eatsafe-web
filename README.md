@@ -8,6 +8,16 @@ To use:
 
     git clone https://github.com/loganmhb/eatsafe-web
     cd eatsafe-web
+
+In order to run the app you need a Google Maps API key. Create a file
+called "config.py," which should look like this:
+
+    MAPS_KEY = <your Maps key here>
+
+That's the only config option at this time. To serve the application,
+run the Flask reverse proxy:
+
     python eatsafe.py
 
-The only thing you can do right now is enter latitude, longitude coordinates. Try (41.9, -87.6) to see some results. Be warned: it's ugly.
+The UI only supports the "near" API method currently, and does not yet
+support optional arguments.
