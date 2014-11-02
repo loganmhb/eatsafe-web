@@ -65,7 +65,6 @@ var SearchBox = React.createClass({
 
 var MapCanvas = React.createClass({
   componentDidMount: function() {
-    console.log("Executing map js.");
     var mapOptions = {
       center: { lat: 41.903196, lng: -87.625916},
       zoom: 9
@@ -75,7 +74,6 @@ var MapCanvas = React.createClass({
                   mapOptions);
     },
   render: function() {
-    console.log("Rendering map div.");
     return (
       <div className="map-canvas"></div>
     );
