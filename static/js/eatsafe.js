@@ -1,9 +1,12 @@
 var Restaurant = React.createClass({
   render: function() {
+    var picUrl = this.props.data.pic !== "" ?
+      this.props.data.pic : "static/img/nopic.png";
     return (
       <div className="restaurant">
-      <h2>{this.props.name}</h2>
-      <p>Recieved a rating of {this.props.rating}.</p>
+        <img className="yelpPic" src={picUrl} />
+        <h3>{this.props.data.name}</h3>
+        <p>Recieved a rating of {this.props.data.rating}.</p>
       </div>
     );
   }
@@ -14,7 +17,7 @@ var RestaurantList = React.createClass({
     var restaurantNodes =
     this.props.restaurants.map(function(restaurant) {
       return (
-	<Restaurant name={restaurant['name']} rating={restaurant['rating']} />
+	<Restaurant data={restaurant} />
       );
     });
     return (
@@ -38,8 +41,8 @@ var SearchBox = React.createClass({
   render: function() {
     return (
       <form id="searchBox" onSubmit={this.handleSubmit}>
-      Lat: <input type="text" ref="lat" />
-      Long: <input type="text" ref="long" />
+      Lat: <input type="text" ref="lat" defaultValue="41.9" />
+      Long: <input type="text" ref="long" defaultValue="-87.6" />
       <input type="submit" value="Search" />
       </form>
     );
