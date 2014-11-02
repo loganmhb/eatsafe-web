@@ -63,6 +63,25 @@ var SearchBox = React.createClass({
   }
 });
 
+var MapCanvas = React.createClass({
+  componentDidMount: function() {
+    console.log("Executing map js.");
+    var mapOptions = {
+      center: { lat: 41.903196, lng: -87.625916},
+      zoom: 9
+    };
+    var map = new
+  google.maps.Map(this.getDOMNode(),
+                  mapOptions);
+    },
+  render: function() {
+    console.log("Rendering map div.");
+    return (
+      <div className="map-canvas"></div>
+    );
+  }
+});
+
 // Parent component for the whole app
 
 var EatSafe = React.createClass({
@@ -93,8 +112,9 @@ var EatSafe = React.createClass({
   render: function() {
     return (
       <div id="eatSafe">
-        <SearchBox onSubmit={this.makeAPIRequest}/>
-        <RestaurantList restaurants={this.state.data}/>
+        <SearchBox onSubmit={this.makeAPIRequest} />
+        <RestaurantList restaurants={this.state.data} />
+        <MapCanvas restaurants={this.state.data} />
       </div>
     );
   }

@@ -3,6 +3,17 @@
     margin-right: 10px;
 }
 
+.restaurantList {
+    float: left;
+    width: 50%;
+}
+
+.map-canvas {
+    height: 500px;
+    width: 50%;
+    float: right;
+}
+
 #searchBox {
     border: 1px solid black;
     margin: 10px;
