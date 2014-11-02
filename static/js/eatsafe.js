@@ -66,8 +66,8 @@ var SearchBox = React.createClass({
 var MapCanvas = React.createClass({
   componentDidMount: function() {
     var mapOptions = {
-      center: { lat: 41.903196, lng: -87.625916},
-      zoom: 9
+      center: new google.maps.LatLng(41.903196, -87.625916),
+      zoom: 10
     };
     var map = new
   google.maps.Map(this.getDOMNode(),
