@@ -19,12 +19,12 @@ var Restaurant = React.createClass({
 
 var RestaurantList = React.createClass({
   render: function() {
-    /* Output a list of Restaurant componenents, passing each object
+    /* Output a list of Restaurant components, passing each object
        to the corresponding restaurant as a prop. */
     var restaurantNodes =
     this.props.restaurants.map(function(restaurant) {
       return (
-	<Restaurant data={restaurant} />
+	<Restaurant data={restaurant} key={restaurant.id} />
       );
     });
     return (
@@ -96,12 +96,11 @@ var MapCanvas = React.createClass({
     // rendered initially.
   },
   addRestaurantMarkers: function(map) {
-    var markers = 
-    this.props.restaurants.map(
-      function(r) {
+    var markers = this.props.restaurants.map(
+      function(restaurant) {
         var restaurantLocation = new google.maps.LatLng({
-          lat: r['lat'],
-          lng: r['long']
+          lat: restaurant['lat'],
+          lng: restaurant['long']
         });
         var marker = new google.maps.Marker({
           position: restaurantLocation,
