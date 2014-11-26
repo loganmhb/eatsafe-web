@@ -1,8 +1,6 @@
-/**
-  EatSafe Web -- Frontend access to the EatSafe API
-
-  Early days yet
-*/
+/* EatSafe Web -- Frontend access to Chicago health inspection data 
+   employing the EatSafe API at api.eatsafechicago.com,
+   with Google Maps integration.  */
 
 var Restaurant = React.createClass({
   render: function() {
@@ -21,8 +19,8 @@ var Restaurant = React.createClass({
 
 var RestaurantList = React.createClass({
   render: function() {
-    // Output a list of Restaurant componenents, passing each object
-    // to the corresponding restaurant as a prop.
+    /* Output a list of Restaurant componenents, passing each object
+       to the corresponding restaurant as a prop. */
     var restaurantNodes =
     this.props.restaurants.map(function(restaurant) {
       return (
@@ -63,17 +61,60 @@ var SearchBox = React.createClass({
   }
 });
 
+
+// Container to hold RestaurantList and SearchBox for display purposes
+
+var RestaurantSearch = React.createClass({
+  render: function() {
+    return (
+      <div className="restaurantSearch">
+        <SearchBox onSubmit={this.props.onSubmit} />
+        <RestaurantList restaurants={this.props.restaurants} />
+      </div>
+    );
+  }
+});
+
+// Google Maps interface component
+
 var MapCanvas = React.createClass({
+  getInitialState: function() {
+    return {
+      map: {}
+    };
+  },
   componentDidMount: function() {
     var mapOptions = {
       center: new google.maps.LatLng(41.903196, -87.625916),
       zoom: 10
     };
-    var map = new
-  google.maps.Map(this.getDOMNode(),
-                  mapOptions);
-    },
+    this.setState({
+      map: new google.maps.Map(this.getDOMNode(),
+                                  mapOptions)
+    });
+    // Create the map and attach it to the div AFTER component is
+    // rendered initially.
+  },
+  addRestaurantMarkers: function(map) {
+    var markers = 
+    this.props.restaurants.map(
+      function(r) {
+        var restaurantLocation = new google.maps.LatLng({
+          lat: r['lat'],
+          lng: r['long']
+        });
+        var marker = new google.maps.Marker({
+          position: restaurantLocation,
+        });
+        return marker;
+      }
+    );
+    markers.map(function (marker) { marker.setMap(this.state.map);});
+  },
   render: function() {
+    if (this.state.map !== {}) {
+      this.addRestaurantMarkers(this.state.map);
+    }
     return (
       <div className="map-canvas"></div>
     );
@@ -110,8 +151,8 @@ var EatSafe = React.createClass({
   render: function() {
     return (
       <div id="eatSafe">
-        <SearchBox onSubmit={this.makeAPIRequest} />
-        <RestaurantList restaurants={this.state.data} />
+        <RestaurantSearch onSubmit={this.makeAPIRequest}
+                          restaurants={this.state.data} />
         <MapCanvas restaurants={this.state.data} />
       </div>
     );
