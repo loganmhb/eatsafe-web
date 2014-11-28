@@ -14,8 +14,13 @@ called "config.py," which should look like this:
 
     MAPS_KEY = <your Maps key here>
 
-That's the only config option at this time. To serve the application,
-run the Flask reverse proxy:
+That's the only config option at this time.
+
+You need Flask to run the application. I use venv, which entails:
+
+    source venv/bin/activate
+
+To serve the application locally, run:
 
     python eatsafe.py
 
