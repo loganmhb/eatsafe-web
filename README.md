@@ -16,9 +16,17 @@ called "config.py," which should look like this:
 
 That's the only config option at this time.
 
-You need Flask to run the application. I use venv, which entails:
+You need Flask to run the application. I use virtualenv. If you have that installed, then after downloading the project, set up the virtual environment folder (which I call venv):
+
+    virtualenv venv
+
+Then activate it:
 
     source venv/bin/activate
+
+Then install Flask:
+
+    pip install flask
 
 To serve the application locally, run:
 
