@@ -30,7 +30,7 @@ Then install Flask:
 
 To serve the application locally, run:
 
-    python eatsafe.py
+    python eatsafeweb.py
 
 The UI only supports the "near" API method currently, and does not yet
 support optional arguments.
