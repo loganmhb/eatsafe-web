@@ -80,12 +80,12 @@ var RestaurantSearch = React.createClass({
 var MapCanvas = React.createClass({
   getInitialState: function() {
     return {
-      map: {}
+      map: {},  // Don't request the map before mounting
     };
   },
   componentDidMount: function() {
     var mapOptions = {
-      center: new google.maps.LatLng(41.903196, -87.625916),
+      center: new google.maps.LatLng(41.903196, -87.625916), // EatSafe defaults
       zoom: 10
     };
     this.setState({
@@ -95,25 +95,18 @@ var MapCanvas = React.createClass({
     // Create the map and attach it to the div AFTER component is
     // rendered initially.
   },
-  addRestaurantMarkers: function(map) {
-    var markers = this.props.restaurants.map(
-      function(restaurant) {
-        var restaurantLocation = new google.maps.LatLng({
-          lat: restaurant['lat'],
-          lng: restaurant['long']
+  addRestaurantMarkers: function() {
+    var createMarker = function (restaurant) {
+        var position = new google.maps.LatLng(restaurant.lat,restaurant.long);
+        return new google.maps.Marker({
+            position: position,
+            map: this.state.map
         });
-        var marker = new google.maps.Marker({
-          position: restaurantLocation,
-        });
-        return marker;
-      }
-    );
-    markers.map(function (marker) { marker.setMap(this.state.map);});
+    }.bind(this);
+    this.props.restaurants.map(createMarker);
   },
   render: function() {
-    if (this.state.map !== {}) {
-      this.addRestaurantMarkers(this.state.map);
-    }
+    this.addRestaurantMarkers();
     return (
       <div className="map-canvas"></div>
     );
