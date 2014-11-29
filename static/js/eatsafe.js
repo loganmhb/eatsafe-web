@@ -3,7 +3,6 @@
    with Google Maps integration.  */
 
 var markers;
-var oldMarkers;
 
 var Restaurant = React.createClass({
   render: function() {
@@ -110,13 +109,10 @@ var MapCanvas = React.createClass({
   },
   render: function() {
     if(typeof markers !== "undefined") {
-      console.log("Unsetting markers.");
       markers.map(function (marker) {
-          marker.setMap(null);
-          console.log(marker.map);
+        marker.setMap(null);
       });
     }
-    oldMarkers = markers;
     markers = this.addRestaurantMarkers();
     return (
       <div className="map-canvas"></div>
