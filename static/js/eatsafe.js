@@ -2,6 +2,9 @@
    employing the EatSafe API at api.eatsafechicago.com,
    with Google Maps integration.  */
 
+var markers;
+var oldMarkers;
+
 var Restaurant = React.createClass({
   render: function() {
     // Get the picture from Yelp if available; otherwise use a placeholder.
@@ -97,16 +100,24 @@ var MapCanvas = React.createClass({
   },
   addRestaurantMarkers: function() {
     var createMarker = function (restaurant) {
-        var position = new google.maps.LatLng(restaurant.lat,restaurant.long);
-        return new google.maps.Marker({
-            position: position,
-            map: this.state.map
-        });
+      var position = new google.maps.LatLng(restaurant.lat,restaurant.long);
+      return new google.maps.Marker({
+        position: position,
+        map: this.state.map
+      });
     }.bind(this);
-    this.props.restaurants.map(createMarker);
+    return this.props.restaurants.map(createMarker);
   },
   render: function() {
-    this.addRestaurantMarkers();
+    if(typeof markers !== "undefined") {
+      console.log("Unsetting markers.");
+      markers.map(function (marker) {
+          marker.setMap(null);
+          console.log(marker.map);
+      });
+    }
+    oldMarkers = markers;
+    markers = this.addRestaurantMarkers();
     return (
       <div className="map-canvas"></div>
     );
