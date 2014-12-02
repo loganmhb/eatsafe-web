@@ -32,5 +32,13 @@ To serve the application locally, run:
 
     python eatsafeweb.py
 
+After the initial setup, the app can be run with:
+
+    source venv/bin/activate
+    python eatsafeweb.py
+
+The React JSX files are kept in a separate jsx/ directory. To compile them to plain Javascript, you need the React command-line tools, available through the npm module react-tools.
+
 The UI only supports the "near" API method currently, and does not yet
 support optional arguments.
+
