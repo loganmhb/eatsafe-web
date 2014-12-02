@@ -4,35 +4,35 @@
 
 var markers;
 
-var Restaurant = React.createClass({displayName: 'Restaurant',
+var Restaurant = React.createClass({
   render: function() {
     // Get the picture from Yelp if available; otherwise use a placeholder.
     var picUrl = this.props.data.pic !== "" ?
       this.props.data.pic : "static/img/nopic.png";
     return (
-      React.createElement("div", {className: "restaurant"}, 
-        React.createElement("img", {className: "yelpPic", src: picUrl}), 
-        React.createElement("h3", null, this.props.data.name), 
-        React.createElement("p", null, "Recieved a rating of ", this.props.data.rating, ".")
-      )
+      <div className="restaurant">
+        <img className="yelpPic" src={picUrl} />
+        <h3>{this.props.data.name}</h3>
+        <p>Recieved a rating of {this.props.data.rating}.</p>
+      </div>
     );
   }
 });
 
-var RestaurantList = React.createClass({displayName: 'RestaurantList',
+var RestaurantList = React.createClass({
   render: function() {
     /* Output a list of Restaurant components, passing each object
        to the corresponding restaurant as a prop. */
     var restaurantNodes =
     this.props.restaurants.map(function(restaurant) {
       return (
-	React.createElement(Restaurant, {data: restaurant, key: restaurant.id})
+	<Restaurant data={restaurant} key={restaurant.id} />
       );
     });
     return (
-      React.createElement("div", {className: "restaurantList"}, 
-        restaurantNodes
-      )
+      <div className="restaurantList">
+        {restaurantNodes}
+      </div>
     );
   }
 });
@@ -40,7 +40,7 @@ var RestaurantList = React.createClass({displayName: 'RestaurantList',
 // SearchBox takes a callback from EatSafe in order to query the API
 // on form submit.
 
-var SearchBox = React.createClass({displayName: 'SearchBox',
+var SearchBox = React.createClass({
   handleSubmit: function(e) {
     // Don't post the form.
     e.preventDefault();
@@ -53,10 +53,10 @@ var SearchBox = React.createClass({displayName: 'SearchBox',
   },
   render: function() {
     return (
-      React.createElement("form", {id: "searchBox", onSubmit: this.handleSubmit}, 
-        React.createElement("input", {type: "text", ref: "query"}), 
-        React.createElement("input", {type: "submit"})
-      )
+      <form id="searchBox" onSubmit={this.handleSubmit}>
+        <input type="text" ref="query" />
+        <input type="submit" />
+      </form>
     );
   }
 });
@@ -64,20 +64,20 @@ var SearchBox = React.createClass({displayName: 'SearchBox',
 
 // Container to hold RestaurantList and SearchBox for display purposes
 
-var RestaurantSearch = React.createClass({displayName: 'RestaurantSearch',
+var RestaurantSearch = React.createClass({
   render: function() {
     return (
-      React.createElement("div", {className: "restaurantSearch"}, 
-        React.createElement(SearchBox, {onSubmit: this.props.onSubmit}), 
-        React.createElement(RestaurantList, {restaurants: this.props.restaurants})
-      )
+      <div className="restaurantSearch">
+        <SearchBox onSubmit={this.props.onSubmit} />
+        <RestaurantList restaurants={this.props.restaurants} />
+      </div>
     );
   }
 });
 
 // Google Maps interface component
 
-var MapCanvas = React.createClass({displayName: 'MapCanvas',
+var MapCanvas = React.createClass({
   getInitialState: function() {
     return {
       map: {},  // Don't request the map before mounting
@@ -113,7 +113,7 @@ var MapCanvas = React.createClass({displayName: 'MapCanvas',
     }
     markers = this.addRestaurantMarkers();
     return (
-      React.createElement("div", {className: "map-canvas"})
+      <div className="map-canvas"></div>
     );
   }
 });
@@ -122,7 +122,7 @@ var MapCanvas = React.createClass({displayName: 'MapCanvas',
 
 // Parent component for the whole app
 
-var EatSafe = React.createClass({displayName: 'EatSafe',
+var EatSafe = React.createClass({
   getInitialState: function() {
     // Initial state is no restaurants
     return {
@@ -149,15 +149,15 @@ var EatSafe = React.createClass({displayName: 'EatSafe',
   },    
   render: function() {
     return (
-      React.createElement("div", {id: "eatSafe"}, 
-        React.createElement(RestaurantSearch, {onSubmit: this.makeAPIRequest, 
-                          restaurants: this.state.data}), 
-        React.createElement(MapCanvas, {restaurants: this.state.data})
-      )
+      <div id="eatSafe">
+        <RestaurantSearch onSubmit={this.makeAPIRequest}
+                          restaurants={this.state.data} />
+        <MapCanvas restaurants={this.state.data} />
+      </div>
     );
   }
 });
 
 React.render(
-  React.createElement(EatSafe, null),
+  <EatSafe />,
   document.getElementById("content"));
