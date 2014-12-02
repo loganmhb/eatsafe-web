@@ -4,4 +4,4 @@ venv/
 \#*#
 .#*
 config.*
-static/js/.modulecache/
+static/js/.module-cache/
