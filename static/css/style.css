@@ -1,10 +1,17 @@
 html, body, #content, #eatSafe {
     height: 100%;
+    background-color: #00B1FF;
 }
 
 .yelpPic {
     float: left;
     margin-right: 10px;
+}
+
+.restaurantSearch {
+    height: 100%;
+    width: 50%;
+    float: left;
 }
 
 #searchBar {
@@ -13,28 +20,32 @@ html, body, #content, #eatSafe {
 
 .restaurantList {
     float: left;
-    width: 50%;
+    overflow: scroll;
+    width: 100%;
+    height: inherit;
 }
 
 .map-canvas {
     height: 100%;
     width: 50%;
     float: right;
+    margin: -5px
+    padding: -5px
 }
 
 #searchBox {
-    border: 1px solid black;
+//    border: 1px solid black;
     margin: 10px;
     padding: 10px;
+    border-radius: 10px;
+    background-color: #FFF;
 }
 
 .restaurant {
-    border: 1px solid black;
+//    border: 1px solid black;
     overflow: auto;
     padding: 10px;
     margin: 10px;
-}
-
-.content {
-    margin: 25px;
+    border-radius: 10px;
+    background-color: #FFF;
 }
