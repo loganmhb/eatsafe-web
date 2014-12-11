@@ -1,1 +1,1 @@
-web: python eatsafeweb.py
+web: python eatsafeweb.py --log-file=-
