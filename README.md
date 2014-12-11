@@ -4,17 +4,14 @@ This is a frontend to access the Chicago health inspection data available
 through the [EatSafe API](https://github.com/samzhang111/EatSafe). It's mostly
 React on top of a tiny Flask app that passes AJAX requests on to the API.
 
+Demo live at [http://eatsafeweb.herokuapp.com/](http://eatsafeweb.herokuapp.com/).
+
 To use:
 
     git clone https://github.com/loganmhb/eatsafe-web
     cd eatsafe-web
 
-In order to run the app you need a Google Maps API key. Create a file
-called "config.py," which should look like this:
-
-    MAPS_KEY = <your Maps key here>
-
-That's the only config option at this time.
+In order to run the app you need a Google Maps API key. Store the key in an environment variable called GOOGLE_MAPS_KEY.
 
 You need Flask to run the application. I use virtualenv. If you have that installed, then after downloading the project, set up the virtual environment folder (which I call venv):
 
@@ -41,4 +38,3 @@ The React JSX files are kept in a separate jsx/ directory. To compile them to pl
 
 The UI only supports the "near" API method currently, and does not yet
 support optional arguments.
-

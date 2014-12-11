@@ -3,5 +3,5 @@ venv/
 # ignore Emacs backups
 \#*#
 .#*
-#config.*
+*.pyc
 static/js/.module-cache/

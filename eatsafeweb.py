@@ -1,12 +1,11 @@
 from flask import Flask, request, render_template
 app = Flask(__name__)
 
-import config
-
-import urllib, urllib2
+import urllib, urllib2, os
 
 @app.route('/')
-def index(): return render_template('index.html', maps_key=config.MAPS_KEY)
+def index():
+    return render_template('index.html', maps_key=os.environ.get('GOOGLE_MAPS_KEY'))
 
 @app.route('/api/<target>')
 def apiAccess(target):
