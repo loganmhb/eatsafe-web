@@ -17,4 +17,4 @@ def apiAccess(target):
     return response.read()
     
 if __name__ == '__main__':
-    app.run(debug=True)  ### Turn this OFF in production.
+    app.run(debug=False)
