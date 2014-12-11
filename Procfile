@@ -1,1 +1,1 @@
-web: python eatsafeweb.py --log-file=-
+web: gunicorn eatsafeweb:app --log-file=-
