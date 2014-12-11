@@ -2,7 +2,7 @@
    employing the EatSafe API at api.eatsafechicago.com,
    with Google Maps integration.  */
 
-var markers;
+var markers; // Hack alert -- workaround to ensure markers can be deleted after use
 
 var Restaurant = React.createClass({
   render: function() {
@@ -37,24 +37,60 @@ var RestaurantList = React.createClass({
   }
 });
 
-// SearchBox takes a callback from EatSafe in order to query the API
+// SearchForm takes a callback from EatSafe in order to query the API
 // on form submit.
 
-var SearchBox = React.createClass({
+var SearchInput = React.createClass({
+  render: function() {
+    if(this.props.APITarget == "instant") {
+      return (
+        <input type="text" ref="query" />
+      );
+    } else if(this.props.APITarget == "near") {
+      return (
+        <div className="latLongInput">
+          Lat: <input type="number" defaultValue="41.903196" ref="lat" />
+          Long: <input type="number" defaultValue="-87.625916" ref="long" />
+        </div>
+      );
+    }
+  }
+});
+
+var SearchForm = React.createClass({
+  getInitialState: function() {
+    return({
+      target: 'near'
+    });
+  },
   handleSubmit: function(e) {
     // Don't post the form.
     e.preventDefault();
     // Query the API through callback.
-    this.props.onSubmit(
-      'instant',
-      {query: this.refs.query.getDOMNode().value}
-    );
+    var params;
+    // Ugh gross FIXME this data flow can't be right
+    if(this.state.target === "instant") {
+      params = {query: this.refs.input.refs.query.getDOMNode().value};
+    } else {
+      params = {lat: this.refs.input.refs.lat.getDOMNode().value,
+                long: this.refs.input.refs.long.getDOMNode().value};
+    }
+    this.props.onSubmit(this.state.target, params);
     return;
+  },
+  handleChange: function() {
+    this.setState({
+      target: this.refs.target.getDOMNode().value
+    });
   },
   render: function() {
     return (
-      <form id="searchBox" onSubmit={this.handleSubmit}>
-        <input type="text" ref="query" />
+      <form id="searchForm" onSubmit={this.handleSubmit}>
+        <select defaultValue="near" ref="target" onChange={this.handleChange}>
+          <option value="instant">Keyword</option>
+          <option value="near">Location</option>
+        </select>
+        <SearchInput ref="input" APITarget={this.state.target} />
         <input type="submit" />
       </form>
     );
@@ -68,7 +104,7 @@ var RestaurantSearch = React.createClass({
   render: function() {
     return (
       <div className="restaurantSearch">
-        <SearchBox onSubmit={this.props.onSubmit} />
+        <SearchForm onSubmit={this.props.onSubmit} />
         <RestaurantList restaurants={this.props.restaurants} />
       </div>
     );
@@ -146,7 +182,7 @@ var EatSafe = React.createClass({
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
-  },    
+  },
   render: function() {
     return (
       <div id="eatSafe">

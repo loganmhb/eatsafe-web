@@ -2,7 +2,7 @@
    employing the EatSafe API at api.eatsafechicago.com,
    with Google Maps integration.  */
 
-var markers;
+var markers; // Hack alert -- workaround to ensure markers can be deleted after use
 
 var Restaurant = React.createClass({displayName: 'Restaurant',
   render: function() {
@@ -37,24 +37,60 @@ var RestaurantList = React.createClass({displayName: 'RestaurantList',
   }
 });
 
-// SearchBox takes a callback from EatSafe in order to query the API
+// SearchForm takes a callback from EatSafe in order to query the API
 // on form submit.
 
-var SearchBox = React.createClass({displayName: 'SearchBox',
+var SearchInput = React.createClass({displayName: 'SearchInput',
+  render: function() {
+    if(this.props.APITarget == "instant") {
+      return (
+        React.createElement("input", {type: "text", ref: "query"})
+      );
+    } else if(this.props.APITarget == "near") {
+      return (
+        React.createElement("div", {className: "latLongInput"}, 
+          "Lat: ", React.createElement("input", {type: "number", defaultValue: "41.903196", ref: "lat"}), 
+          "Long: ", React.createElement("input", {type: "number", defaultValue: "-87.625916", ref: "long"})
+        )
+      );
+    }
+  }
+});
+
+var SearchForm = React.createClass({displayName: 'SearchForm',
+  getInitialState: function() {
+    return({
+      target: 'near'
+    });
+  },
   handleSubmit: function(e) {
     // Don't post the form.
     e.preventDefault();
     // Query the API through callback.
-    this.props.onSubmit(
-      'instant',
-      {query: this.refs.query.getDOMNode().value}
-    );
+    var params;
+    // Ugh gross FIXME this data flow can't be right
+    if(this.state.target === "instant") {
+      params = {query: this.refs.input.refs.query.getDOMNode().value};
+    } else {
+      params = {lat: this.refs.input.refs.lat.getDOMNode().value,
+                long: this.refs.input.refs.long.getDOMNode().value};
+    }
+    this.props.onSubmit(this.state.target, params);
     return;
+  },
+  handleChange: function() {
+    this.setState({
+      target: this.refs.target.getDOMNode().value
+    });
   },
   render: function() {
     return (
-      React.createElement("form", {id: "searchBox", onSubmit: this.handleSubmit}, 
-        React.createElement("input", {type: "text", ref: "query"}), 
+      React.createElement("form", {id: "searchForm", onSubmit: this.handleSubmit}, 
+        React.createElement("select", {defaultValue: "near", ref: "target", onChange: this.handleChange}, 
+          React.createElement("option", {value: "instant"}, "Keyword"), 
+          React.createElement("option", {value: "near"}, "Location")
+        ), 
+        React.createElement(SearchInput, {ref: "input", APITarget: this.state.target}), 
         React.createElement("input", {type: "submit"})
       )
     );
@@ -68,7 +104,7 @@ var RestaurantSearch = React.createClass({displayName: 'RestaurantSearch',
   render: function() {
     return (
       React.createElement("div", {className: "restaurantSearch"}, 
-        React.createElement(SearchBox, {onSubmit: this.props.onSubmit}), 
+        React.createElement(SearchForm, {onSubmit: this.props.onSubmit}), 
         React.createElement(RestaurantList, {restaurants: this.props.restaurants})
       )
     );
@@ -146,7 +182,7 @@ var EatSafe = React.createClass({displayName: 'EatSafe',
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
-  },    
+  },
   render: function() {
     return (
       React.createElement("div", {id: "eatSafe"}, 
