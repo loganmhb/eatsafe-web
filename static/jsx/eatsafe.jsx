@@ -138,7 +138,9 @@ var MapCanvas = React.createClass({
         map: this.state.map
       });
     }.bind(this);
-    return restaurants.map(createMarker);
+    if (typeof restaurants !== "undefined") {
+      return restaurants.map(createMarker);
+    }
   },
   componentWillReceiveProps: function(nextProps) {
     this.state.markers.map(function (marker) {

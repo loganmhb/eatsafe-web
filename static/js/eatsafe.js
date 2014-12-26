@@ -2,8 +2,6 @@
    employing the EatSafe API at api.eatsafechicago.com,
    with Google Maps integration.  */
 
-var markers; // Hack alert -- workaround to ensure markers can be deleted after use
-
 var Restaurant = React.createClass({displayName: 'Restaurant',
   render: function() {
     // Get the picture from Yelp if available; otherwise use a placeholder.
@@ -116,7 +114,8 @@ var RestaurantSearch = React.createClass({displayName: 'RestaurantSearch',
 var MapCanvas = React.createClass({displayName: 'MapCanvas',
   getInitialState: function() {
     return {
-      map: {},  // Don't request the map before mounting
+      map: {}, // Don't request the map before mounting
+      markers: []
     };
   },
   componentDidMount: function() {
@@ -131,7 +130,7 @@ var MapCanvas = React.createClass({displayName: 'MapCanvas',
     // Create the map and attach it to the div AFTER component is
     // rendered initially.
   },
-  addRestaurantMarkers: function() {
+  addRestaurantMarkers: function(restaurants) {
     var createMarker = function (restaurant) {
       var position = new google.maps.LatLng(restaurant.lat,restaurant.long);
       return new google.maps.Marker({
@@ -139,15 +138,20 @@ var MapCanvas = React.createClass({displayName: 'MapCanvas',
         map: this.state.map
       });
     }.bind(this);
-    return this.props.restaurants.map(createMarker);
+    if (typeof restaurants !== "undefined") {
+      return restaurants.map(createMarker);
+    }
+  },
+  componentWillReceiveProps: function(nextProps) {
+    this.state.markers.map(function (marker) {
+      marker.setMap(null);
+    });
+    this.setState({
+      map: this.state.map,
+      markers: this.addRestaurantMarkers(nextProps.restauarants)
+    });
   },
   render: function() {
-    if(typeof markers !== "undefined") {
-      markers.map(function (marker) {
-        marker.setMap(null);
-      });
-    }
-    markers = this.addRestaurantMarkers();
     return (
       React.createElement("div", {className: "map-canvas"})
     );
