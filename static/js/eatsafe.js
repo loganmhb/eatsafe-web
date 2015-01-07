@@ -47,8 +47,8 @@ var SearchInput = React.createClass({displayName: 'SearchInput',
     } else if(this.props.APITarget == "near") {
       return (
         React.createElement("div", {className: "latLongInput"}, 
-          "Lat: ", React.createElement("input", {type: "number", defaultValue: "41.903196", ref: "lat"}), 
-          "Long: ", React.createElement("input", {type: "number", defaultValue: "-87.625916", ref: "long"})
+          "Lat: ", React.createElement("input", {type: "number", defaultValue: "41.903196", step: "0.00001", ref: "lat"}), 
+          "Long: ", React.createElement("input", {type: "number", defaultValue: "-87.625916", step: "0.00001", ref: "long"})
         )
       );
     }
@@ -125,7 +125,8 @@ var MapCanvas = React.createClass({displayName: 'MapCanvas',
     };
     this.setState({
       map: new google.maps.Map(this.getDOMNode(),
-                                  mapOptions)
+                                  mapOptions),
+      markers: []
     });
     // Create the map and attach it to the div AFTER component is
     // rendered initially.
